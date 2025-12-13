@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #b3c6ff, #e6ebff);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-container {
+            background: #ffffff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            width: 380px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 12px;
+        }
+
+        td {
+            font-size: 14px;
+            color: #444;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        input[type="date"] {
+            width: 100%;
+            padding: 8px 10px;
+            margin-top: 6px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #5c5cff;
+            box-shadow: 0 0 5px rgba(92, 92, 255, 0.4);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background: #5c5cff;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #3f3fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Student Registration Form</h2>
+
+        <form action="/addstudent" method="get">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <td>
+                        Name
+                        <input type="text" name="name" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Age
+                        <input type="number" name="age" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Email
+                        <input type="email" name="email" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Date of Birth
+                        <input type="date" name="dob" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Mobile
+                        <input type="number" name="cell" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="submit" value="Register Student" class="submit-btn">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+</body>
+</html>

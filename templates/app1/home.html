@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #b3b3ff, #ccccff);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 300px;
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .btn {
+            display: block;
+            text-decoration: none;
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 6px;
+            background-color: #5c5cff;
+            color: white;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #3f3fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Student Portal</h2>
+        <a href="{% url 'addstudenttemp' %}" class="btn">Add Student</a>
+        <a href="{% url 'displaytemp' %}" class="btn">Display Students</a>
+    </div>
+
+</body>
+</html>
