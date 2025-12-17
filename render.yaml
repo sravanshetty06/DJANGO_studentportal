@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: django-studentdata
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --noinput
+    startCommand: gunicorn studentdata.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DJANGO_DEBUG
+        value: 'False'
+      - key: SECRET_KEY
+        fromDatabase: false
+      - key: DATABASE_URL
+        fromDatabase: false

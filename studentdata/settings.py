@@ -33,7 +33,24 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-q$nc+j-&q@#v4ikhmk-5^
 # Default to False in production; can be enabled locally with DJANGO_DEBUG=True
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['*']
+# Allow hosts to be configured via environment variable (comma-separated). Defaults to '*' for convenience.
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
+
+# When deployed behind a proxy (like Render), honor the X-Forwarded-Proto header for determining secure requests
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# When DEBUG is False, enforce secure cookies and SSL redirect by default (can be changed by env vars)
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', 'True') == 'True'
+    # HSTS: configured via env var in seconds (0 disables). Set to a positive value in production.
+    SECURE_HSTS_SECONDS = int(os.environ.get('SECURE_HSTS_SECONDS', '0'))
+
+# Optional: allow setting trusted CSRF origins via env variable (comma separated full origins e.g. https://example.onrender.com)
+csfr_origins = os.environ.get('CSRF_TRUSTED_ORIGINS')
+if csfr_origins:
+    CSRF_TRUSTED_ORIGINS = [x.strip() for x in csfr_origins.split(',') if x.strip()]
 
 
 # Application definition
@@ -84,22 +101,20 @@ WSGI_APPLICATION = 'studentdata.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME':'roadstar',
-        'USER':'root',
-        'PASSWORD':'sravan123@',
-        'HOST':'localhost',
-        'PORT':'3306'
-    }
-}
-
-# If a DATABASE_URL environment variable is provided (e.g. Render), use it to configure the DB
 DATABASE_URL = os.environ.get('DATABASE_URL')
 if DATABASE_URL:
+    # Use DATABASE_URL (e.g. provided by Render Postgres) when available
     DATABASES = {
         'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600, conn_health_checks=True)
+    }
+else:
+    # For local development and to allow `manage.py check` to run without extra DB drivers,
+    # fall back to SQLite unless a DATABASE_URL is provided.
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
 
 
