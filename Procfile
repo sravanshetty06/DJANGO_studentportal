@@ -1,1 +1,1 @@
-web: gunicorn studentdata.wsgi:application
+web: gunicorn studentdata.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 120 --graceful-timeout 120 --keep-alive 5 --max-requests 1000 --max-requests-jitter 50 --log-file - --access-logfile - --error-logfile -
