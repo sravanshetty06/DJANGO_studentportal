@@ -22,10 +22,16 @@ from app1.views import addstudent,addstudenttemp,display,displaytemp,home
 urlpatterns = [
     path('', views.home, name='home'),  
     path('admin/', admin.site.urls),
-    path('addstudenttemp/',addstudenttemp,name="addstudenttemp"),
-    path('addstudent/',addstudent),
-    path('displaytemp/',displaytemp,name="displaytemp"),
-    path('display/',display),
-    #path('delete/<int:id>/', views.delete_student, name='delete_student'),
-    path('home/',home)
+    path('addstudenttemp/', views.addstudenttemp, name="addstudenttemp"),
+    path('addstudent/', views.addstudent, name='add_student_logic'),
+    
+    # Advanced Management
+    path('manage/', views.manage_students, name='manage_students'),
+    path('update/<int:id>/', views.update_student, name='update_student'),
+    path('delete/<int:id>/', views.delete_student, name='delete_student'),
+
+    # Legacy (Redirects)
+    path('displaytemp/', views.displaytemp, name="displaytemp"),
+    path('display/', views.display),
+    path('home/', views.home)
 ]

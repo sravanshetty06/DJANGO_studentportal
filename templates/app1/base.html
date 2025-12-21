@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Flatpickr (Professional Calendar) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="brand">
+            StudentPortal
+        </div>
+        <div class="nav-links">
+            <a href="{% url 'home' %}" class="nav-link">Home</a>
+            <a href="{% url 'addstudenttemp' %}" class="nav-link">Add Student</a>
+            <a href="{% url 'manage_students' %}" class="nav-link">Manage Students</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        &copy; 2025 Student Portal. Project developed by <strong>Sravan Doniparthi</strong>.
+    </footer>
+
+</body>
+
+</html>
+    <!-- Init Flatpickr -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            flatpickr(".date-picker", {
+                dateFormat: "Y-m-d", // Format sent to server
+                altInput: true,
+                altFormat: "F j, Y", // User-friendly format (e.g. March 25, 2007)
+                animate: true,
+                disableMobile: true, // Force our custom UI on mobile for consistency
+            });
+        });
+    </script>

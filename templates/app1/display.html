@@ -1,102 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Student Details</title>
+{% extends 'app1/base.html' %}
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: linear-gradient(135deg, #d9e4ff, #f2f6ff);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .card {
-            background: #ffffff;
-            padding: 30px 40px;
-            border-radius: 12px;
-            width: 360px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 25px;
-            color: #333;
-        }
-
-        table {
-            width: 100%;
-        }
-
-        label {
-            font-size: 14px;
-            font-weight: bold;
-            color: #555;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 12px 14px;
-            margin-top: 8px;
-            border-radius: 8px;
-            border: 1.5px solid #ccc;
-            font-size: 14px;
-            outline: none;
-            box-sizing: border-box;
-        }
-
-        input[type="text"]:focus {
-            border-color: #5c5cff;
-            box-shadow: 0 0 6px rgba(92, 92, 255, 0.4);
-        }
-
-        input[type="submit"] {
-            width: 100%;
-            padding: 12px;
-            margin-top: 18px;
-            border: none;
-            border-radius: 8px;
-            background: #5c5cff;
-            color: #ffffff;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        input[type="submit"]:hover {
-            background: #3f3fff;
-        }
-    </style>
-</head>
-
-<body>
+{% block content %}
+<div class="flex-center">
     <div class="card">
-        <h2>Get student details</h2>
+        <h2 class="card-title">Search Student Records</h2>
 
-        <form action="/display">
+        <form action="/display" method="get">
             {% csrf_token %}
-            <table>
-                <tr>
-                    <td>
-                        <label for="name">Name</label>
-                        <input type="text" name="name" id="name" placeholder="Enter student name">
-                    </td>
-                </tr>
 
-                <tr>
-                    <td>
-                        <input type="submit" value="Submit">
-                    </td>
-                </tr>
-            </table>
+            <div class="form-group" style="text-align: center; margin-bottom: 2rem;">
+                <label for="name" style="text-align: left;">Student Name</label>
+                <input type="text" name="name" id="name" placeholder="Enter name to search..." required>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">Search Records</button>
         </form>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

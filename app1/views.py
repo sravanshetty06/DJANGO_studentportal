@@ -1,53 +1,85 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
+from django.db.models import Q
 from app1.models import Student
-# Create your views here.
 
+# --- Home Page ---
 def home(request):
-    response=render(request,"app1/home.html")
-    return response
+    return render(request, "app1/home.html")
 
+# --- Create (Add Student) ---
 def addstudenttemp(request):
-    response=render(request,"app1/addstudent.html")
-    return response
-
+    return render(request, "app1/addstudent.html")
 
 def addstudent(request):
-        name=request.GET['name']
-        age=request.GET['age']
-        email=request.GET['email']
-        dob=request.GET['dob']
-        cell=request.GET['cell']
-        std=Student(name=name,age=age,email=email,dob=dob,cell=cell)
+    try:
+        name = request.GET['name']
+        age = request.GET['age']
+        email = request.GET['email']
+        dob = request.GET['dob']
+        cell = request.GET['cell']
+        
+        std = Student(name=name, age=age, email=email, dob=dob, cell=cell)
         std.save()
-        msg=f"student added added successfully"
-        return HttpResponse(msg)
-def displaytemp(request):
-    response=render(request,"app1/display.html")
-    return response
-def display(request):
-    name=request.GET['name']
-    std11=Student.objects.all().filter(name=name)
-    if len(std11)!=0:
-        response=render(request,"app1/displaystudent.html",context={'std11':std11})
-        return response
+        
+        return render(request, "app1/success.html", {'name': name})
+    except Exception as e:
+        return HttpResponse(f"Error adding student: {e}")
+
+# --- Read (Dashboard & Search) ---
+def manage_students(request):
+    query = request.GET.get('q', '')
+    
+    if query:
+        # Smart search: Name OR Email
+        students = Student.objects.filter(
+            Q(name__icontains=query) | Q(email__icontains=query)
+        )
     else:
-        return HttpResponse(f"student doesnot exist")
-"""def display(request):
-    name = request.GET.get('name')
+        students = Student.objects.all().order_by('-id') # Newest first
 
-    print("SEARCH NAME:", name)   # 🔴 DEBUG LINE
+    # Stats for Dashboard
+    total_students = Student.objects.count()
+    
+    context = {
+        'students': students,
+        'query': query,
+        'total_count': total_students
+    }
+    return render(request, "app1/manage_students.html", context)
 
-    if name:
-        students = Student.objects.filter(name__icontains=name)
-    else:
-        students = Student.objects.all()
 
-    print("RESULT COUNT:", students.count())  # 🔴 DEBUG
+# --- Update (Edit Student) ---
+def update_student(request, id):
+    student = get_object_or_404(Student, id=id)
 
-    return render(request, 'display.html', {'students': students})"""
-"""def delete_student(request, id):
     if request.method == 'POST':
-        student = get_object_or_404(Student, id=id)
+        # Simple POST handling without Django Forms class (keeping it vanilla as per current setup)
+        student.name = request.POST.get('name')
+        student.age = request.POST.get('age')
+        student.email = request.POST.get('email')
+        student.dob = request.POST.get('dob')
+        student.cell = request.POST.get('cell')
+        student.save()
+        return redirect('manage_students')
+
+    return render(request, "app1/update_student.html", {'student': student})
+
+
+# --- Delete ---
+def delete_student(request, id):
+    student = get_object_or_404(Student, id=id)
+    
+    if request.method == "POST":
         student.delete()
-    return redirect('display')"""
+        return redirect('manage_students')
+        
+    return render(request, "app1/delete_confirm.html", {'student': student})
+
+
+# --- Legacy Redirects (Optional, keeping for compatibility) ---
+def displaytemp(request):
+    return redirect('manage_students')
+
+def display(request):
+    return redirect('manage_students')

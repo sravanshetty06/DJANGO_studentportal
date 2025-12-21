@@ -1,14 +1,15 @@
 services:
   - type: web
-    name: django-studentdata
-    env: python
-    plan: free
-    buildCommand: pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --noinput
-    startCommand: gunicorn studentdata.wsgi:application --bind 0.0.0.0:$PORT
+    name: studentportal
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn studentdata.wsgi:application"
     envVars:
-      - key: DJANGO_DEBUG
-        value: 'False'
-      - key: SECRET_KEY
-        fromDatabase: false
+      - key: PYTHON_VERSION
+        value: 3.11.0
       - key: DATABASE_URL
-        fromDatabase: false
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: False

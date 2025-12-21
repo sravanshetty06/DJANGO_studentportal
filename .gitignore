@@ -1,18 +1,31 @@
 # Python
+*.pyc
 __pycache__/
 *.py[cod]
 *$py.class
-
-# Environments
+*.so
+.Python
 env/
-.venv/
 venv/
+ENV/
 
-# Django static
+# Django
+*.log
+db.sqlite3
+db.sqlite3-journal
 /staticfiles/
+/media/
 
-# Local env
+# Environment variables
 .env
+.env.local
 
-# VS Code
+# IDE
 .vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

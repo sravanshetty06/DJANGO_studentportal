@@ -1,0 +1,31 @@
+{% extends 'app1/base.html' %}
+
+{% block content %}
+<div class="flex-center">
+    <div class="card card-danger-border" style="text-align: center; max-width: 500px;">
+        <div class="warning-icon">!</div>
+
+        <h2 class="card-title text-danger">Delete Student?</h2>
+
+        <p style="margin-bottom: 2rem; color: var(--secondary-color);">
+            Are you sure you want to delete <strong>{{ student.name }}</strong>? <br>
+            This action cannot be undone.
+        </p>
+
+        <div
+            style="background-color: #FEF2F2; padding: 1rem; border-radius: 0.5rem; margin-bottom: 2rem; text-align: left;">
+            <p><strong>ID:</strong> {{ student.id }}</p>
+            <p><strong>Email:</strong> {{ student.email }}</p>
+            <p><strong>Mobile:</strong> {{ student.cell }}</p>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="grid" style="grid-template-columns: 1fr 1fr;">
+                <a href="{% url 'manage_students' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

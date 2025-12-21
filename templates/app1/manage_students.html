@@ -1,0 +1,77 @@
+{% extends 'app1/base.html' %}
+
+{% block content %}
+<div style="max-width: 1200px; margin: 0 auto;">
+
+    <!-- Dashboard Stats -->
+    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 2rem;">
+        <div class="card" style="padding: 1.5rem; text-align: center; border-left: 4px solid var(--primary-color);">
+            <h3 style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 0.5rem;">{{ total_count }}</h3>
+            <p style="color: var(--secondary-color); font-weight: 500;">Total Students</p>
+        </div>
+
+        <div class="card" style="padding: 1.5rem; text-align: center; border-left: 4px solid var(--success-color);">
+            <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--success-color);">Active</h3>
+            <p style="color: var(--secondary-color);">Status</p>
+        </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar-container"
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <h2 style="margin: 0;">Manage Students</h2>
+
+        <form action="" method="get" class="search-form" style="display: flex; gap: 0.5rem; flex: 1; max-width: 400px;">
+            <input type="text" name="q" placeholder="Search by name or email..." value="{{ query }}"
+                style="padding: 0.5rem; flex: 1;">
+            <button type="submit" class="btn btn-primary">Search</button>
+            {% if query %}
+            <a href="{% url 'manage_students' %}" class="btn btn-secondary">Clear</a>
+            {% endif %}
+        </form>
+
+        <a href="{% url 'addstudenttemp' %}" class="btn btn-primary">+ Add New</a>
+    </div>
+
+    <!-- Data Table -->
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Email</th>
+                    <th>Date of Birth</th>
+                    <th>Mobile</th>
+                    <th style="text-align: center;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for std in students %}
+                <tr>
+                    <td>#{{ std.id }}</td>
+                    <td><strong>{{ std.name }}</strong></td>
+                    <td>{{ std.age }}</td>
+                    <td>{{ std.email }}</td>
+                    <td>{{ std.dob }}</td>
+                    <td>{{ std.cell }}</td>
+                    <td style="text-align: center;">
+                        <a href="{% url 'update_student' std.id %}" class="btn btn-secondary"
+                            style="padding: 0.25rem 0.75rem; font-size: 0.875rem; margin-right: 0.25rem;">Edit</a>
+                        <a href="{% url 'delete_student' std.id %}" class="btn"
+                            style="background-color: var(--error-color); color: white; padding: 0.25rem 0.75rem; font-size: 0.875rem;">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="no-data">
+                        No students found. <a href="{% url 'addstudenttemp' %}">Add one now</a>.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

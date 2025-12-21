@@ -1,0 +1,19 @@
+{% extends 'app1/base.html' %}
+
+{% block content %}
+<div class="flex-center">
+    <div class="card success-card">
+        <div class="success-icon">✓</div>
+        <h2 class="card-title" style="color: var(--success-color);">Success!</h2>
+
+        <p class="success-message">
+            The student <strong>{{ name }}</strong> has been added to the database successfully.
+        </p>
+
+        <div class="grid">
+            <a href="{% url 'home' %}" class="btn btn-primary btn-full">Done</a>
+            <a href="{% url 'addstudenttemp' %}" class="btn btn-secondary btn-full">Add Another Student</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
