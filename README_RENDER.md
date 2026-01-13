@@ -21,6 +21,18 @@ Steps to deploy this Django project to Render:
 
 Render YAML: This repo includes `render.yaml` so you can create the service via Git by rendering a Service file if you prefer infra-as-code.
 
+## Keep‑alive pinger (self‑ping) 🔁
+This project includes a small background daemon that periodically sends an HTTP GET to the service's public URL to help keep free Render instances awake.
+
+- It is started automatically at app startup by `app1.apps.App1Config.ready()` (it avoids running during common management commands).
+- Environment variables:
+  - `PING_ENABLED` (True/False) — default: `True` (set to `False` to disable)
+  - `PING_URL` — default: `https://afsal.onrender.com` (replace with your actual Render URL)
+  - `PING_INTERVAL_SECONDS` — default: `840` (14 minutes). When `DJANGO_DEBUG=True` the default is `30` seconds to make local testing faster.
+- Logs are emitted via the `app1.pinger` logger and will appear on the console (or Render logs).
+
+Note: the pinger runs in each running process as a daemon thread; if you prefer a single centralized keep-alive, consider using Render cron jobs or an external monitor and set `PING_ENABLED=False` here.
+
 Troubleshooting tips:
 - If `collectstatic` fails, ensure `STATIC_ROOT` is writable and `STATICFILES_STORAGE` is set (we use WhiteNoise storage).
 - Check the build logs for missing packages and ensure `requirements.txt` is up to date.

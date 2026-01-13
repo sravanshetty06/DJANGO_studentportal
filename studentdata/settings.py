@@ -164,3 +164,37 @@ os.makedirs(STATIC_ROOT, exist_ok=True)
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# --- Render / ping keep-alive settings ---
+# Controls a background daemon that periodically pings the app's public URL to keep free Render instances awake.
+# Configure these via environment variables if desired:
+#   PING_ENABLED (True/False), PING_URL (full URL to ping), PING_INTERVAL_SECONDS
+PING_ENABLED = os.environ.get('PING_ENABLED', 'True') == 'True'
+PING_URL = os.environ.get('PING_URL', 'https://afsal.onrender.com')
+# Default interval: 30 seconds in DEBUG for quick local testing; otherwise 14 minutes in production.
+PING_INTERVAL = int(os.environ.get('PING_INTERVAL_SECONDS', str(30 if DEBUG else 14 * 60)))  # interval in seconds
+
+
+# Logging: ensure pinger logs show on console when running locally
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'app1.pinger': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
+
