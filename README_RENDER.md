@@ -31,7 +31,17 @@ This project includes a small background daemon that periodically sends an HTTP 
   - `PING_INTERVAL_SECONDS` — default: `840` (14 minutes). When `DJANGO_DEBUG=True` the default is `30` seconds to make local testing faster.
 - Logs are emitted via the `app1.pinger` logger and will appear on the console (or Render logs).
 
-Note: the pinger runs in each running process as a daemon thread; if you prefer a single centralized keep-alive, consider using Render cron jobs or an external monitor and set `PING_ENABLED=False` here.
+Note: the pinger runs in each running process as a daemon thread; this means that if your deployment has multiple workers or instances, each one will perform the ping and you'll see multiple requests every interval.
+
+If you want exactly one ping per interval (recommended to avoid duplicate requests):
+- Use Render cron jobs (recommended): create a job that calls your service URL every 14 minutes and set `PING_ENABLED=False` in the service env vars.
+- Use an external uptime monitor (UptimeRobot, Cron-job.org, etc.) and set `PING_ENABLED=False` in env vars.
+- If you prefer an in-app single-pinger, implement a distributed lock (Redis cache or Postgres advisory lock) so only one process performs the ping; this repository does not enable that by default.
+
+To disable the internal pinger in Render when using an external cron/monitor, set:
+```
+PING_ENABLED=False
+```
 
 Troubleshooting tips:
 - If `collectstatic` fails, ensure `STATIC_ROOT` is writable and `STATICFILES_STORAGE` is set (we use WhiteNoise storage).
